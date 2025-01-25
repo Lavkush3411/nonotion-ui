@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div className="text-red-500"> Hello no notion</div>;
+  return <div className="text-red-500"> Hello no notion document</div>;
 }
