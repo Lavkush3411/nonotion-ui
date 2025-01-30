@@ -4,6 +4,7 @@ import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import UserItems from "./UserItems";
 
 function Navigation() {
   const pathName = usePathname();
@@ -13,9 +14,29 @@ function Navigation() {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const navbarRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const showMenuIcon = isLoaded && isCollapsed;
+
+  useEffect(() => {
+    if (sidebarRef.current && navbarRef.current) {
+      if (isMobile && !isCollapsed) {
+        sidebarRef.current.style.width = "100%";
+      } else if (!isMobile && !isCollapsed) {
+        sidebarRef.current.style.setProperty("width", "240px");
+      } else if (isMobile && isCollapsed) {
+        sidebarRef.current.style.setProperty("width", "0");
+      }
+    }
+  }, [isMobile, isCollapsed]);
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsCollapsed(true);
+    } else {
+      setIsCollapsed(false);
+    }
+  }, [isMobile]);
 
   const handleMouseMove = (event: MouseEvent) => {
     if (!isResizingRef.current) return;
@@ -25,7 +46,6 @@ function Navigation() {
 
     if (sidebarRef.current && navbarRef.current) {
       sidebarRef.current.style.width = `${newWidth}px`;
-      navbarRef.current.style.setProperty("left", `${newWidth}px`);
     }
   };
   const handleMouseUp = (event: MouseEvent) => {
@@ -53,7 +73,6 @@ function Navigation() {
     if (sidebarRef.current && navbarRef.current) {
       setIsResetting(true);
       sidebarRef.current.style.width = "240px";
-      navbarRef.current.style.setProperty("left", "240px");
       setTimeout(() => {
         setIsResetting(false);
       }, 300);
@@ -66,10 +85,8 @@ function Navigation() {
       setIsResetting(true);
       if (isCollapsed) {
         sidebarRef.current.style.width = "240px";
-        navbarRef.current.style.setProperty("left", "240px");
       } else {
         sidebarRef.current.style.width = "0";
-        navbarRef.current.style.setProperty("left", "0");
       }
       setTimeout(() => {
         setIsResetting(false);
@@ -101,7 +118,7 @@ function Navigation() {
           <ChevronsLeft />
         </div>
         <div>
-          <p>Action Items</p>
+          <UserItems />
         </div>
         <div className="mt-4">
           <p>Documents</p>
@@ -116,16 +133,16 @@ function Navigation() {
       <div
         ref={navbarRef}
         className={cn(
-          "absolute top-0 z-[99999] left-60 px-3 py-3 ",
+          "absolute top-0 z-[99999] left-0 px-3 py-3 ",
           isResetting && "transition-all ease-in-out duration-300",
           isLoaded && isMobile && "left-0 w-full"
         )}
       >
         <nav>
-          {isLoaded && isCollapsed && (
+          {showMenuIcon && (
             <MenuIcon
               onClick={toggleNavbar}
-              className="h-6 w-6 text-muted-foreground"
+              className="h-6 w-6 text-muted-foreground "
             />
           )}
         </nav>

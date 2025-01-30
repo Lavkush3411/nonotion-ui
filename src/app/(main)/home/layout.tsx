@@ -5,7 +5,7 @@ function Home({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-full">
       <Navigation />
-      <div className="flex-1 w-24 bg-red-500  overflow-y-hidden">
+      <div className="flex-1 w-24 bg-primary-700  overflow-y-hidden">
         {children}
       </div>
     </div>
