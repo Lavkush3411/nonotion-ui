@@ -2,11 +2,13 @@
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItems from "./UserItems";
+import Spinner from "@/components/ui/Spinner";
+import CreatePage from "./CreatePage";
 
-function Navigation() {
+function Navigation({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
   console.log(pathName);
   const isMobile = useMediaQuery("(max-width:768px)");
@@ -117,12 +119,16 @@ function Navigation() {
         >
           <ChevronsLeft />
         </div>
+
         <div>
           <UserItems />
         </div>
-        <div className="mt-4">
-          <p>Documents</p>
+        <div>
+          <CreatePage />
         </div>
+        <Suspense fallback={<Spinner />}>
+          <div className="mt-4">{children}</div>
+        </Suspense>
         <div
           className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize absolute h-full bg-primary/10 w-1 right-0 top-0"
           onMouseDown={handleMouseDown}

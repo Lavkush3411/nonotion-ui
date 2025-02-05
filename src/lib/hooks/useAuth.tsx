@@ -5,7 +5,7 @@ function useAuth() {
   const { data, isPending } = useQuery({
     queryKey: ["hello"],
     queryFn: async () =>
-      new Promise((resolve) => setTimeout(() => resolve(true), 1000)),
+      new Promise((resolve) => setTimeout(() => resolve(true), 0)),
   });
   return { data, isPending };
 }
