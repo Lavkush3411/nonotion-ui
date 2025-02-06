@@ -3,6 +3,7 @@ import { api } from "../api";
 import { API_ROUTES } from "../_common/api-route";
 import { QUERY_KEYS } from "../_common/query-keys";
 import { PageResponse } from "../types/page-type";
+import { updateSidebarData } from "../utils/update-sidebardata";
 
 interface PageCreateInterface {
   title: string;
@@ -12,7 +13,6 @@ interface PageCreateInterface {
 
 function useCreatePage() {
   const { postData, getData } = api();
-  // const {} = usePageById();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: PageCreateInterface) => {
@@ -28,26 +28,10 @@ function useCreatePage() {
             return getData(API_ROUTES.GET.PAGE_BY_ID(data.parentId || ""));
           },
         });
-        debugger;
-        console.log("additionalData", additionalData);
         queryClient.setQueryData(
           QUERY_KEYS.PageList,
-          (oldData: PageResponse[]) => {
-            const updateNestedItem = (
-              items: PageResponse[]
-            ): PageResponse[] => {
-              return items.map((item) => {
-                if (item.id === data.parentId) {
-                  return additionalData;
-                }
-                if (item.children) {
-                  return { ...item, children: updateNestedItem(item.children) };
-                }
-                return item;
-              });
-            };
-            return updateNestedItem(oldData);
-          }
+          (oldData: PageResponse[]) =>
+            updateSidebarData(oldData, additionalData, false)
         );
       }
     },
