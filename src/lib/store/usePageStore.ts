@@ -1,7 +1,15 @@
 import { create } from "zustand";
-export const usePageStore = create((set) => ({
+import { PageResponse } from "../types/page-type";
+
+interface PageStore {
+  currentPageId: string | null;
+  currentPageData: PageResponse | null;
+  setCurrentPageId: (currentPageId: string) => void;
+  setCurrentPageData: (currentPageData: PageResponse) => void;
+}
+export const usePageStore = create<PageStore>((set) => ({
   currentPageId: null,
-  data: [],
-  setData: (data: unknown) => set({ data }),
+  currentPageData: null,
   setCurrentPageId: (currentPageId: string) => set({ currentPageId }),
+  setCurrentPageData: (currentPageData) => set({ currentPageData }),
 }));

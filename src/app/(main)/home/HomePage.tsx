@@ -1,33 +1,17 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import useCreatePage from "@/lib/hooks/useCreatePage";
-import { PlusCircle } from "lucide-react";
-import Image from "next/image";
+import Empty from "@/app/_components/client/Empty";
+import OpenedPage from "@/app/_components/client/OpenedPage";
+import Spinner from "@/components/ui/Spinner";
+import useSidebarPageData from "@/lib/hooks/useSidebarPageData";
 import React from "react";
 
 function HomePage() {
-  const { mutate: createPage } = useCreatePage();
-
-  const handleCreatePage = () => {
-    createPage({ title: "Page from home" });
-  };
-
+  const { data, isPending } = useSidebarPageData();
+  if (isPending) return <Spinner />;
+  const isEmpty = !data || data.length === 0;
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <Image
-        src="/images/empty.jpg"
-        className="justify-center align-center"
-        alt="Home"
-        width={500}
-        height={500}
-      />
-      <h1 className="text-3xl font-bold">NoNotion</h1>
-      <p className="text-lg">Welcome to the Workspace</p>
-
-      <Button className="mt-4" size="lg" onClick={handleCreatePage}>
-        <PlusCircle size={36} /> Create a new page
-      </Button>
+      {isEmpty ? <Empty /> : <OpenedPage />}
     </div>
   );
 }

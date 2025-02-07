@@ -1,6 +1,7 @@
 import { QUERY_KEYS } from "@/lib/_common/query-keys";
 import useCreatePage from "@/lib/hooks/useCreatePage";
 import usePageById from "@/lib/hooks/usePageById";
+import { usePageStore } from "@/lib/store/usePageStore";
 import { PageResponse } from "@/lib/types/page-type";
 import { cn } from "@/lib/utils";
 import { updateSidebarData } from "@/lib/utils/update-sidebardata";
@@ -11,6 +12,7 @@ import React, { useState } from "react";
 function Page({ page, level }: { page: PageResponse; level: number }) {
   const { mutate: createPage } = useCreatePage();
   const [isExpanded, setIsExpanded] = useState(false);
+  const { setCurrentPageData } = usePageStore();
   const handleCreatePage = (id: string) => {
     createPage({ title: "New Page", parentId: id });
   };
@@ -26,8 +28,18 @@ function Page({ page, level }: { page: PageResponse; level: number }) {
     setIsExpanded(!isExpanded);
   };
 
+  const handleOpenPage = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    console.log(page);
+    setCurrentPageData(page);
+  };
+
   return (
-    <div key={page.id} style={{ marginLeft: `${level * 5}px` }}>
+    <div
+      key={page.id}
+      style={{ marginLeft: `${level * 5}px` }}
+      onClick={handleOpenPage}
+    >
       <div className="group/page flex justify-between items-center p-2 hover:bg-gray-300">
         <h1>{page.title}</h1>
         <div
