@@ -2,9 +2,11 @@
 import { PageResponse } from "@/lib/types/page-type";
 import Page from "./Page";
 import useSidebarData from "@/lib/hooks/useSidebarPageData";
+import Spinner from "@/components/ui/Spinner";
 
 function Pages() {
-  const { data } = useSidebarData();
+  const { data, isPending } = useSidebarData();
+  if (isPending) return <Spinner />;
   return (
     data &&
     (data ?? []).map((page: PageResponse) => (

@@ -21,3 +21,21 @@ export function updateSidebarData(
     return page;
   });
 }
+
+export function updateContent(
+  pages: PageResponse[],
+  newData: PageResponse
+): PageResponse[] {
+  return pages.map((page) => {
+    if (page.id === newData.id) {
+      return { ...page, content: newData.content };
+    }
+    if (page.children) {
+      return {
+        ...page,
+        children: updateContent(page.children, newData),
+      };
+    }
+    return page;
+  });
+}

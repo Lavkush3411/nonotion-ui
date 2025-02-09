@@ -41,7 +41,11 @@ function Page({ page, level }: { page: PageResponse; level: number }) {
       onClick={handleOpenPage}
     >
       <div className="group/page flex justify-between items-center p-2 hover:bg-gray-300">
-        <h1>{page.title}</h1>
+        <h1>
+          {page.content
+            ? JSON.parse(page.content)?.[0]?.content?.[0]?.text
+            : "undefined"}
+        </h1>
         <div
           role="button"
           className="opacity-0 group-hover/page:opacity-100 transition flex"

@@ -32,6 +32,16 @@ export function api() {
     }
   };
 
+  const patchData = async (url: string, data: object) => {
+    const apiUrl = `${BASE_URL}${url}`;
+    try {
+      const res = await axios.patch(apiUrl, data);
+      return { data: res.data, status: res.status, error: null };
+    } catch (e) {
+      return { data: null, status: 500, error: e };
+    }
+  };
+
   const deleteData = async (url: string) => {
     const apiUrl = `${BASE_URL}${url}`;
     try {
@@ -56,5 +66,5 @@ export function api() {
     }
   };
 
-  return { getData, postData, putData, deleteData, putFile };
+  return { getData, postData, putData, patchData, deleteData, putFile };
 }

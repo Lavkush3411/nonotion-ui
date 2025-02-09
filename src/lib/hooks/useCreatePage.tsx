@@ -16,12 +16,10 @@ function useCreatePage() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: PageCreateInterface) => {
-      await postData(API_ROUTES.POST.PAGE_CREATE, data);
+      return await postData(API_ROUTES.POST.PAGE_CREATE, data);
     },
     onSuccess: async (res, data) => {
       if (data.parentId) {
-        console.log("parentId", data.parentId);
-
         const { data: additionalData } = await queryClient.fetchQuery({
           queryKey: QUERY_KEYS.PageById(data.parentId),
           queryFn: async () => {
@@ -33,6 +31,8 @@ function useCreatePage() {
           (oldData: PageResponse[]) =>
             updateSidebarData(oldData, additionalData, false)
         );
+      } else {
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PageList });
       }
     },
   });
