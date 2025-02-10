@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 export function api() {
   const getData = async (url: string) => {
     const apiUrl = `${BASE_URL}${url}`;
