@@ -20,7 +20,8 @@ function Page({ page, level }: { page: PageResponse; level: number }) {
   const { data, refetch } = usePageById(page.id);
   const queryClient = useQueryClient();
 
-  const handleFetchPageData = async () => {
+  const handleFetchPageData = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     await refetch();
     queryClient.setQueryData(QUERY_KEYS.PageList, (old: PageResponse[]) =>
       updateSidebarData(old, data?.data, isExpanded)
