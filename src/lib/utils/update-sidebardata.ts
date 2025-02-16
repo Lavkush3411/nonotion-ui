@@ -22,6 +22,18 @@ export function updateSidebarData(
   });
 }
 
+export function deleteSidebarData(
+  pages: PageResponse[],
+  id: string
+): PageResponse[] {
+  return pages
+    .filter((page) => page.id !== id)
+    .map((page) => ({
+      ...page,
+      children: page.children ? deleteSidebarData(page.children, id) : [],
+    }));
+}
+
 export function updateContent(
   pages: PageResponse[],
   newData: PageResponse

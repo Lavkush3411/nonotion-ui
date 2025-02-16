@@ -8,10 +8,14 @@ function Pages() {
   const { data, isPending } = useSidebarData();
   if (isPending) return <Spinner />;
   return (
-    data &&
-    (data ?? []).map((page: PageResponse) => (
-      <Page key={page.id} page={page} level={1} />
-    ))
+    <>
+      <div className=" font-medium text-lg ml-2 text-gray-500">Pages</div>
+
+      {data &&
+        (data ?? []).map((page: PageResponse) => (
+          <Page key={page.id} page={page} level={0} />
+        ))}
+    </>
   );
 }
 

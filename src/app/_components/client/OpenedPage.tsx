@@ -9,12 +9,14 @@ import { Editor } from "./DynamicEditor";
 import useSavePage from "@/lib/hooks/useSavePage";
 import { Block } from "@blocknote/core";
 import Spinner from "@/components/ui/Spinner";
+import { Download, Save } from "lucide-react";
+import CustomToolTip from "./tooltip/tooltip.custom";
 
 const data = JSON.stringify([
   {
-    id: "default-block", // Unique ID
-    type: "paragraph", // Block type
-    content: [{ type: "text", text: "Enter page name...", styles: {} }], // Default text
+    id: "default-block",
+    type: "paragraph",
+    content: [{ type: "text", text: "Enter page name...", styles: {} }],
   },
 ]);
 function OpenedPage() {
@@ -50,16 +52,18 @@ function OpenedPage() {
   if (!currentPageData?.id) return <NoOpenedPage />;
   return (
     <div className="w-full h-full text-wrap overflow-y-scroll p-4">
-      <Button className="top-3 right-20 absolute z-10">
-        {isPending ? <Spinner /> : "Export"}
-      </Button>
-      <Button
-        disabled={isPending}
-        className="top-3 right-3 absolute z-10"
-        onClick={onUpdate}
-      >
-        {isPending ? <Spinner /> : "Save"}
-      </Button>
+      <div className="flex justify-end gap-2 items-center">
+        <CustomToolTip message="Export Page">
+          <Button>
+            {isPending ? <Spinner /> : <Download className="rotate-180" />}
+          </Button>
+        </CustomToolTip>
+        <CustomToolTip message="Save">
+          <Button disabled={isPending} onClick={onUpdate}>
+            {isPending ? <Spinner /> : <Save />}
+          </Button>
+        </CustomToolTip>
+      </div>
       <Editor initialContent={initialContent} onChange={onChange} />
     </div>
   );
