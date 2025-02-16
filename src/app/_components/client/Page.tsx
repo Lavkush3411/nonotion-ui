@@ -12,7 +12,7 @@ import React, { useState } from "react";
 function Page({ page, level }: { page: PageResponse; level: number }) {
   const { mutate: createPage } = useCreatePage();
   const [isExpanded, setIsExpanded] = useState(false);
-  const { setCurrentPageData } = usePageStore();
+  const { currentPageData, setCurrentPageData } = usePageStore();
   const handleCreatePage = (id: string) => {
     createPage({ title: "New Page", parentId: id });
   };
@@ -41,7 +41,12 @@ function Page({ page, level }: { page: PageResponse; level: number }) {
       style={{ marginLeft: `${level * 5}px` }}
       onClick={handleOpenPage}
     >
-      <div className="group/page flex justify-between items-center p-2 hover:bg-gray-300">
+      <div
+        className={cn(
+          "group/page flex justify-between items-center p-2 hover:bg-gray-200",
+          currentPageData?.id === page.id && "bg-gray-300"
+        )}
+      >
         <h1>
           {page.content
             ? JSON.parse(page.content)?.[0]?.content?.[0]?.text

@@ -50,6 +50,9 @@ function OpenedPage() {
   if (!currentPageData?.id) return <NoOpenedPage />;
   return (
     <div className="w-full h-full text-wrap overflow-y-scroll p-4">
+      <Button className="top-3 right-20 absolute z-10">
+        {isPending ? <Spinner /> : "Export"}
+      </Button>
       <Button
         disabled={isPending}
         className="top-3 right-3 absolute z-10"

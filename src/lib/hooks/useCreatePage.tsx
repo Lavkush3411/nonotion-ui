@@ -4,6 +4,7 @@ import { API_ROUTES } from "../_common/api-route";
 import { QUERY_KEYS } from "../_common/query-keys";
 import { PageResponse } from "../types/page-type";
 import { updateSidebarData } from "../utils/update-sidebardata";
+import { usePageStore } from "../store/usePageStore";
 
 interface PageCreateInterface {
   title: string;
@@ -14,11 +15,14 @@ interface PageCreateInterface {
 function useCreatePage() {
   const { postData, getData } = api();
   const queryClient = useQueryClient();
+  const { setCurrentPageData } = usePageStore();
+
   return useMutation({
     mutationFn: async (data: PageCreateInterface) => {
       return await postData(API_ROUTES.POST.PAGE_CREATE, data);
     },
     onSuccess: async (res, data) => {
+      setCurrentPageData(res.data);
       if (data.parentId) {
         const { data: additionalData } = await queryClient.fetchQuery({
           queryKey: QUERY_KEYS.PageById(data.parentId),
